@@ -78,7 +78,15 @@ app.post('/api/persons', (request, response) => {
     if (body.name === undefined) {
       return response.status(400).json({error: 'Nimi puuttuu'})
     }
-  
+    if (body.number === undefined) {
+        return response.status(400).json({error: 'Numero puuttuu'})
+    }
+
+    const existingPerson = persons.find(person => person.name === body.name)
+    if ( existingPerson ) {
+        return response.status(400).json({error: 'Nimi on jo luettelossa'})
+    }
+
     const person = {
       name: body.name,
       number: body.number,
@@ -86,10 +94,6 @@ app.post('/api/persons', (request, response) => {
     }
   
     persons = persons.concat(person)
-
-    //console.log('nimi ', person.name)
-    //console.log('numero ', person.number)
-    //console.log('id ', person.id)
     response.json(person)
   })
 
