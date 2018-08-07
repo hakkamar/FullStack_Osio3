@@ -1,5 +1,8 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
+
+app.use(bodyParser.json())
 
 let persons = [
       {
@@ -62,6 +65,33 @@ app.delete('/api/persons/:id', (request, response) => {
   
     response.status(204).end()
 })
+
+const generateRandomId = () => {
+    const max = 100000000
+    const min = persons.length
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    if (body.name === undefined) {
+      return response.status(400).json({error: 'Nimi puuttuu'})
+    }
+  
+    const person = {
+      name: body.name,
+      number: body.number,
+      id: generateRandomId()
+    }
+  
+    persons = persons.concat(person)
+
+    //console.log('nimi ', person.name)
+    //console.log('numero ', person.number)
+    //console.log('id ', person.id)
+    response.json(person)
+  })
 
 const PORT = 3001
 app.listen(PORT, () => {
