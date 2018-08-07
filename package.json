@@ -1,0 +1,27 @@
+{
+  "name": "puhelinluettelobackend",
+  "version": "1.0.0",
+  "description": "Puhelinluettelo",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hakkamar/FullStack_Osio3.git"
+  },
+  "author": "Marko Hakkarainen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hakkamar/FullStack_Osio3/issues"
+  },
+  "homepage": "https://github.com/hakkamar/FullStack_Osio3#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  }
+}
