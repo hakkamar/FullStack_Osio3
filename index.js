@@ -51,6 +51,10 @@ app.get('/api/persons', (request, response) => {
         .then(persons => {
             response.json(persons.map(formatPerson))
         })
+        .catch(error => {
+            console.log(error)
+            response.status(404).end()
+        })
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -58,7 +62,11 @@ app.get('/api/persons/:id', (request, response) => {
         .findById(request.params.id)
         .then(person => {
             response.json(formatPerson(person))
-        }) 
+        })
+        .catch(error => {
+            console.log(error)
+            response.status(404).end()
+        })
 })
   
 app.delete('/api/persons/:id', (request, response) => {
@@ -95,6 +103,10 @@ app.post('/api/persons', (request, response) => {
         .save()
         .then(savedPerson => {
             response.json(formatPerson(savedPerson))
+        })
+        .catch(error => {
+            console.log(error)
+            response.status(404).end()
         })
 })
 
