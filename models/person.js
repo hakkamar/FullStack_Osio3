@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
+if ( process.env.NODE_ENV !== 'production' ) {
+    require('dotenv').config()
+}
 
-const url = 'mongodb://fullstack:salasana@ds121182.mlab.com:21182/osa3'
+const url = process.env.MONGODB_URI
+//const url = 'mongodb://fullstack:salasana@ds121182.mlab.com:21182/osa3'
 
 //
 //  Tuli ilmoitus käynnistettäessä:
