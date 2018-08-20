@@ -13,8 +13,8 @@ const url = process.env.MONGODB_URI
 // To use the new parser, pass option { useNewUrlParser: true } to MongoClient.connect.
 //
 //  Korjattiin noin.... 
-mongoose.connect(url, { useNewUrlParser: true })
-//mongoose.connect(url)
+//mongoose.connect(url, { useNewUrlParser: true })
+mongoose.connect(url)
 mongoose.Promise = global.Promise
 
 const personSchema = new mongoose.Schema({
