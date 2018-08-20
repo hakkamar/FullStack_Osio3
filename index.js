@@ -6,6 +6,7 @@ const cors = require('cors')
 const Person = require('./models/person')
 
 var kpl = 0
+var taulukko = [null]
 alustaKpl()
 
 app.use(bodyParser.json())
@@ -33,11 +34,11 @@ const formatPerson = (person) => {
 
 function alustaKpl () {
     Person
-    .find({})
-    .then(persons => {
-        //console.log('Taulukossa on ', persons.length)
-        kpl = persons.length
-    })
+        .find({})
+        .then(persons => {
+            kpl = persons.length
+            taulukko = persons          
+        })
 }
 
 app.get('/', (req, res) => {
@@ -77,6 +78,7 @@ app.get('/api/persons/:id', (request, response) => {
                 response.status(404).end()
             }            
         })
+        .then(alustaKpl())        
         .catch(error => {
             console.log(error)
             response.status(400).send({ error: 'malformatted id' })
@@ -96,41 +98,39 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
+    alustaKpl()
     const body = request.body
+    const nameToBeAdded = body.name
+    const numberToBeAdded = body.number
 
-    console.log('===> nimi', body.name)
-    console.log('===> numero', body.number)
-
-    if (body.name === undefined || body.name === '') {
+    if (nameToBeAdded === undefined || nameToBeAdded === '') {
         return response.status(400).json({error: 'Nimi puuttuu'})
     }
-    if (body.number === undefined || body.number === '') {
+    if (numberToBeAdded === undefined || numberToBeAdded === '') {
         return response.status(400).json({error: 'Numero puuttuu'})
     }
 
-    //
-    // tää kans kuntoon....
-    //
-    //const existingPerson = persons.find(person => person.name === body.name)    
-    //if ( existingPerson ) {
-    //    return response.status(400).json({error: 'Nimi on jo luettelossa'})
-    //}
+    const existingPerson = taulukko.find(persoona => persoona.name === nameToBeAdded)    
+    if ( existingPerson ) {
+        return response.status(400).json({error: 'Nimi on jo luettelossa'})
+    }
 
     const person = new Person ({
-      name: body.name,
-      number: body.number
-    })
-  
+        name: nameToBeAdded,
+        number: numberToBeAdded
+    })         
+
     person
         .save()
-        .then(savedPerson => {
-            response.json(formatPerson(savedPerson))
+        .then(formatPerson)
+        .then(savedAndFormatPerson => {
+            response.json(savedAndFormatPerson)
         })
         .then(alustaKpl())
         .catch(error => {
             console.log(error)
             response.status(404).end()
-        })
+        })   
 })
 
 app.put('/api/persons/:id', (request, response) => {
